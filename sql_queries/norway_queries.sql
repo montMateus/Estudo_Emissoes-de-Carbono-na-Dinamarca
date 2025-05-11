@@ -205,7 +205,7 @@ WITH no_2021_summary AS (
         ROUND((SUM(low_carbon_percentage)/COUNT(low_carbon_percentage))::NUMERIC, 2) AS avg_low_carbon_percentage
     FROM norway.year_2023_hourly
     GROUP BY country, zone_id, EXTRACT(MONTH FROM datetime_utc), EXTRACT(HOUR FROM datetime_utc)
-WITH no_2024_summary AS (
+),no_2024_summary AS (
     SELECT 
         '2024' AS year_,
         country,
@@ -255,5 +255,6 @@ SELECT
     avg_renewable_percentage,
     avg_low_carbon_percentage
 FROM total_summary
+WHERE hour_grouped = 0
 ORDER BY year_, month_grouped, hour_grouped
 

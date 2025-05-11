@@ -1,3 +1,34 @@
+WITH a AS (
+
+SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
+FROM sweden.year_2021_hourly
+GROUP BY EXTRACT(YEAR FROM datetime_utc)
+
+UNION
+
+SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
+FROM sweden.year_2022_hourly
+GROUP BY EXTRACT(YEAR FROM datetime_utc)
+
+UNION
+
+SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
+FROM sweden.year_2023_hourly
+GROUP BY EXTRACT(YEAR FROM datetime_utc)
+
+UNION
+
+SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
+FROM sweden.year_2024_hourly
+GROUP BY EXTRACT(YEAR FROM datetime_utc)
+
+)
+
+SELECT * FROM a
+ORDER BY extract
+
+
+
 WITH se_2021_summary AS (
     SELECT 
 		'2021' AS year_,
