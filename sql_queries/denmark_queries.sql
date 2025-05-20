@@ -1,35 +1,42 @@
-select * from denmark.year_2021_hourly
+
+								
+								
+								
+								SELECT * FROM denmark.year_2021_hourly
+								WHERE EXTRACT(HOUR FROM datetime_utc) = 4
+
+
+								
 
 -- SUM YEAR
 
-WITH a AS (
-
-SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
-FROM denmark.year_2021_hourly
-GROUP BY EXTRACT(YEAR FROM datetime_utc)
-
-UNION
-
-SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
-FROM denmark.year_2022_hourly
-GROUP BY EXTRACT(YEAR FROM datetime_utc)
-
-UNION
-
-SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
-FROM denmark.year_2023_hourly
-GROUP BY EXTRACT(YEAR FROM datetime_utc)
-
-UNION
-
-SELECT EXTRACT(YEAR FROM datetime_utc), SUM(carbon_intensity_direct)
-FROM denmark.year_2024_hourly
-GROUP BY EXTRACT(YEAR FROM datetime_utc)
-
+WITH emission_hourly AS (
+	SELECT EXTRACT(YEAR FROM datetime_utc) AS year_, EXTRACT(HOUR FROM datetime_utc) AS hour_, ROUND(SUM(carbon_intensity_direct)::NUMERIC, 2) AS max_direct_carbon_emission
+	FROM denmark.year_2021_hourly
+	GROUP BY EXTRACT(YEAR FROM datetime_utc), EXTRACT(HOUR FROM datetime_utc)
+	
+	UNION
+	
+	SELECT EXTRACT(YEAR FROM datetime_utc) AS year_, EXTRACT(HOUR FROM datetime_utc) AS hour_, ROUND(SUM(carbon_intensity_direct)::NUMERIC, 2) AS max_direct_carbon_emission
+	FROM denmark.year_2022_hourly
+	GROUP BY EXTRACT(YEAR FROM datetime_utc), EXTRACT(HOUR FROM datetime_utc)
+	
+	UNION
+	
+	SELECT EXTRACT(YEAR FROM datetime_utc) AS year_, EXTRACT(HOUR FROM datetime_utc) AS hour_, ROUND(SUM(carbon_intensity_direct)::NUMERIC, 2) AS max_direct_carbon_emission
+	FROM denmark.year_2023_hourly
+	GROUP BY EXTRACT(YEAR FROM datetime_utc), EXTRACT(HOUR FROM datetime_utc)
+	
+	UNION
+	
+	SELECT EXTRACT(YEAR FROM datetime_utc) AS year_, EXTRACT(HOUR FROM datetime_utc) AS hour_, ROUND(SUM(carbon_intensity_direct)::NUMERIC, 2) AS max_direct_carbon_emission
+	FROM denmark.year_2024_hourly
+	GROUP BY EXTRACT(YEAR FROM datetime_utc), EXTRACT(HOUR FROM datetime_utc)
 )
-
-SELECT * FROM a
-ORDER BY extract
+SELECT year_, hour_, max_direct_carbon_emission
+FROM emission_hourly
+WHERE year_ = 2021
+ORDER BY hour_, year_
 
 -- Visão geral
 
