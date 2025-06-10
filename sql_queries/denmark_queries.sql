@@ -35,7 +35,6 @@ WITH emission_hourly AS (
 )
 SELECT year_, hour_, max_direct_carbon_emission
 FROM emission_hourly
-WHERE year_ = 2021
 ORDER BY hour_, year_
 
 -- Visão geral
